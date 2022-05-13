@@ -2,3 +2,11 @@
 Code for simulating channels, the initial access environment, and our SSB-Encoder algorithm.
 
 All usage must include a citation to our work, with the following bibtex citation
+```
+@article{DreifuerstHeathLearningSub6Codebooks2022,
+    author={Ryan M., Dreifuerst and Robert W., Heath and Ali, Yazdan},
+    title={Massive {MIMO} Beam Management in Sub-6 {GHz} {5G NR}},
+    journal = {accepted at {IEEE Vehicular Technology Conference}},
+    year={2022}
+}
+```
