@@ -6,7 +6,7 @@ All usage must include a citation to our work, with the following bibtex citatio
 @article{DreifuerstLearningSub6Codebooks2022,
     author={Ryan M., Dreifuerst and Robert W., Heath and Ali, Yazdan},
     title={Massive {MIMO} Beam Management in Sub-6 {GHz} {5G NR}},
-    journal = {accepted at {IEEE Vehicular Technology Conference}},
+    journal = {In proc. of {IEEE Vehicular Technology Conference}},
     year={2022}
 }
 ```
