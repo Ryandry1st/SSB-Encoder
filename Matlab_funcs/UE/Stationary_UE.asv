@@ -1,0 +1,32 @@
+function [locs, centers_xy] = Stationary_UE(params, N, centers_xy)
+% Return randomly placed UEs over the entire region, drawn from uniform
+% spacing
+
+radii = params.rmin + sqrt((params.rmax-params.rmin) * rand(N, 1));
+angles = params.theta_min + (params.theta_max-params.theta_min) * rand(N, 1);
+
+assignments = discretize(1:N, numel(centers_xy(1, :)));
+
+for i=1:N
+    angles(i) = angles(i) + deg2rad(params.orientations(assignments(i), 1)) - pi/2; % Offset for diff
+end
+x_locs = radii .* cos(angles);
+y_locs = radii .* sin(angles);
+
+locs = zeros(N, 3);
+for i=1:N
+    locs(i, 1:2) = centers_xy(:, assignments(i)) + randomness(:, i);
+    if any(max_xy - abs(locs(i, :)) < max_xy/100)
+        locs(i, 1:2) = centers_xy(:, assignments(i)) + randomness(:, i)/2;
+    end
+end
+locs(:, 3) = 1.5; % 1.5m tall UEs for stationary
+
+
+% scatter(locs(:, 1), locs(:, 2), 'filled');
+% hold on;
+% scatter(centers_xy(1, :), centers_xy(2, :), 'filled')
+% hold off;
+
+end
+
