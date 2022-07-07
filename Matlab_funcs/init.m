@@ -1,17 +1,18 @@
 params.total_time = 4;           % Total simulated time
 params.fs = 200;                 % Sampling frequency of channels (not 5G sampling freq)
 params.fc = 3.5e9;               % Carrier frequency
-params.BW = 100;                 % Bandwidth
+params.BW = 100e6;                 % Bandwidth
 params.batch = 0;
 params.n_FFT = 270;
 params.scs = 30e3;
 params.Ts = 1/(params.n_FFT * params.scs);
 params.output_rsrp = 0;
 params.L = 192;
+params.save_H_D = 0;
 params.save_folder_r = 'data/';
 directories = dir(params.save_folder_r);
 num_dir = numel(directories([directories(:).isdir]))-2;
-params.save_folder_r = [params.save_folder_r, 'sub6 M-MIMO ', num2str(num_dir), '/'];
+params.save_folder_r = [params.save_folder_r, 'M-MIMO ', num2str(num_dir), '/'];
 mkdir(params.save_folder_r);
 mkdir([params.save_folder_r, 'channels/']);
 

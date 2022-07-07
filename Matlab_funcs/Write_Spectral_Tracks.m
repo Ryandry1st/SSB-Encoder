@@ -118,9 +118,11 @@ for tx_k = 1:l.no_tx
             end
             save([params.save_folder_r, '/channels/', 'TX_', num2str(tx_k), '_Sector_', num2str(sector), '_UE_', num2str(rx_k), ], '-v7.3', 'fr');
         end
-        chan.H = H;
-        chan.D = D;
-        save([params.save_folder_r, '/channels/', 'TX_', num2str(tx_k), '_Sector_', num2str(sector), '_Channel'], '-v7.3', 'chan');
+        if params.save_H_D
+            chan.H = H;
+            chan.D = D;
+            save([params.save_folder_r, '/channels/', 'TX_', num2str(tx_k), '_Sector_', num2str(sector), '_Channel'], '-v7.3', 'chan');
+        end
         
     end
 end

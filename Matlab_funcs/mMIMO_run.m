@@ -9,7 +9,7 @@ step = 1;
 
 
     tstart = tic;
-    init;
+    init_xmimo;
     l = UE_layout(params);
 %     for i=1:l.no_rx
 %         l.rx_track(i).no_segments = l.rx_track(i).no_snapshots;
