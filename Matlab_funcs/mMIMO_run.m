@@ -1,11 +1,13 @@
 addpath(genpath([pwd, '/functions']));
 clear all;
 close all;
-% for step=1:20
-step = 1;
-    %% Setup
+for step=47:49
     seed = step;
     rng(seed);
+    clear all;
+    close all;
+% step = 3; % 2 results in 31 UEs vs 25
+    %% Setup
 
 
     tstart = tic;
@@ -22,18 +24,17 @@ step = 1;
     cn = merge( get_channels( p ) ); 
 
     c = reshape(cn, l.no_rx, l.no_tx, []);
-    for i=1:l.no_rx
-        for j=1:l.no_tx
-            c(i, j) = c(i, j).quantize_delays(params.Ts, params.L, [], [], [], 0);
-        end
-    end
-
-    used_time = toc;
+%     for i=1:l.no_rx
+%         for j=1:l.no_tx
+%             c(i, j) = c(i, j).quantize_delays(params.Ts, params.L, [], [], [], 0);
+%         end
+%     end
+    clear p cn a b fr freq_response % needed for memory room for the frequency response
+    used_time = toc(tstart);
     fprintf("Time taken for simulation = %3.1f minutes ", used_time/60);
     l.visualize([],[],0);                                     % Show BS and MT positions on the map
     saveas(gcf, strcat(params.save_folder_r, 'Layout.png'))
     %% Outputs
-    Write_Spectral_Tracks;
 
     [ map,x_coords,y_coords] = l.power_map('3GPP_3D_UMa_NLOS', 'sf',15,-300,300,-300,300,1.5, params.Tx_P_dBm(1, 1));
     % scenario FB_UMa_NLOS, type 'quick', sample distance, x,y min/max, rx
@@ -54,7 +55,12 @@ step = 1;
     set(0,'DefaultFigurePaperSize',[14.5 7.3])                % Adjust paper size for plot                                  % Show BS and MT positions on the map
 
     saveas(gcf, strcat(params.save_folder_r, 'Rough_RSRP_Map.png'))
+    
+    close all
+    clear map x_coords y_coords P 
+
+    Write_Spectral_Tracks;
 
     total_time = toc(tstart);
     fprintf("Time taken for simulation+writing = %3.1f minutes ", total_time/60);
-% end
+end

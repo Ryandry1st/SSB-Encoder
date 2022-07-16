@@ -209,6 +209,7 @@ if no_stat_UE > 0
         t.movement_profile = [0, ttime; 0, norm(velocities(k, :))*ttime];
         t.calc_orientation;
         [~, h_layout.rx_track(k)] = interpolate(t.copy, 'time', 1/params.fs);
+        calc_orientation(h_layout.rx_track(k));
     end
 end
 
@@ -231,8 +232,9 @@ for i=1:params.no_tx
     h_layout.tx_array(i).center_frequency = params.fc;
 end
 for i=1:h_layout.no_rx
-%    h_layout.rx_array(i) = qd_arrayant('3gpp-3d', params.Nr, 1, params.fc, 1);
-    h_layout.rx_array(i) = qd_arrayant('ula4');
+   h_layout.rx_array(i) = qd_arrayant('3gpp-3d', params.Nr/2, 2, params.fc, 1);
+%     h_layout.rx_array(i) = qd_arrayant('ula8');
+%     h_layout.rx_array(i) = qd_arrayant('3gpp-macro', 90, 160/params.Nr, 30, -10);
     h_layout.rx_array(i).center_frequency = params.fc;
 end
 

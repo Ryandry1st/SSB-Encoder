@@ -68,10 +68,11 @@ paths = max([c(:).no_path]);
 for tx_k = 1:l.no_tx
     for sector = 1:params.no_sectors
         chan = {};
-        H = zeros(l.no_rx, params.Nr, params.Nx*params.Ny, paths, params.total_time*params.fs+1);
-        D = zeros(l.no_rx, params.Nr, params.Nx*params.Ny, paths, params.total_time*params.fs+1);
+        if params.save_H_D
+            H = zeros(l.no_rx, params.Nr, params.Nx*params.Ny, paths, params.total_time*params.fs+1);
+            D = zeros(l.no_rx, params.Nr, params.Nx*params.Ny, paths, params.total_time*params.fs+1);
+        end
         for rx_k = 1:l.no_rx
-            fr = zeros(params.Nr, params.Nx*params.Ny, params.n_FFT, params.total_time*params.fs+1);
             tx_sec_index = (tx_k-1)*params.no_sectors+sector;
             % Get the frequency response values
             % Create virtual beamspace channel
@@ -101,22 +102,30 @@ for tx_k = 1:l.no_tx
 %             end
 %             running_index(tx_k, sector) = index_end;
             a = c(rx_k, tx_sec_index).coeff;
-            b = c(rx_k, tx_sec_index).delay;
-            freq_response = c(rx_k, tx_sec_index).fr(params.BW, params.n_FFT, [], 1);
-            
-            c_paths = c(rx_k, tx_sec_index).no_path;
-            % if stationary, last dim of a needs to be tiled
             dims = size(a);
+            if ~params.save_H_D
+                clear a
+            else
+                b = c(rx_k, tx_sec_index).delay;
+                c_paths = c(rx_k, tx_sec_index).no_path;
+            end
+            freq_response = c(rx_k, tx_sec_index).fr(params.BW, params.n_FFT, [], 2); % passing in 2 instead of 1 means use gpu but with single-precision
+            fr = zeros(params.Nr, params.Nx*params.Ny, params.n_FFT, params.total_time*params.fs+1);
+            % if stationary, last dim of a needs to be tiled
             if dims(end) == 2
-                H(rx_k, :, :, 1:c_paths, :) = repmat(a(:, :, :, end), [1, 1, 1, params.fs*params.total_time+1]);
-                D(rx_k, :, :, 1:c_paths, :) = repmat(b(:, :, :, end), [1, 1, 1, params.fs*params.total_time+1]);
+                if params.save_H_D
+                    H(rx_k, :, :, 1:c_paths, :) = repmat(a(:, :, :, end), [1, 1, 1, params.fs*params.total_time+1]);
+                    D(rx_k, :, :, 1:c_paths, :) = repmat(b(:, :, :, end), [1, 1, 1, params.fs*params.total_time+1]);
+                end
                 fr(:, :, :, :) = repmat(freq_response(:, :, :, end), [1, 1, 1, params.fs*params.total_time+1]);
             else
-                H(rx_k, :, :, 1:c_paths, :) = a;
-                D(rx_k, :, :, 1:c_paths, :) = b;
+                if params.save_H_D
+                    H(rx_k, :, :, 1:c_paths, :) = a;
+                    D(rx_k, :, :, 1:c_paths, :) = b;
+                end
                 fr(:, :, :, :) = freq_response;
             end
-            save([params.save_folder_r, '/channels/', 'TX_', num2str(tx_k), '_Sector_', num2str(sector), '_UE_', num2str(rx_k), ], '-v7.3', 'fr');
+            save([params.save_folder_r, '/channels/', 'TX_', num2str(tx_k), '_Sector_', num2str(sector), '_UE_', num2str(rx_k), ], '-v7.3', 'fr', '-nocompression'); % '-nocompression' increases file size by ~6x but ~15x faster write speed
         end
         if params.save_H_D
             chan.H = H;
