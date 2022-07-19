@@ -1,7 +1,7 @@
 addpath(genpath([pwd, '/functions']));
 clear all;
 close all;
-for step=47:49
+for step=1:1
     seed = step;
     rng(seed);
     clear all;
@@ -11,7 +11,7 @@ for step=47:49
 
 
     tstart = tic;
-    init_xmimo;
+    init_sub6;
     l = UE_layout(params);
 %     for i=1:l.no_rx
 %         l.rx_track(i).no_segments = l.rx_track(i).no_snapshots;

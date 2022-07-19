@@ -23,9 +23,9 @@ if nargin <= 1
     max_xy = 300;
     h_layout = qd_layout;
     p_stationary = 0.0;
-    p_walking = 0.5;
-    p_driving = 0.4;
-    p_flying = 0.1;
+    p_walking = 0.95;
+    p_driving = 0.05;
+    p_flying = 0.0;
     ttime = params.total_time;
 
 else
@@ -87,8 +87,8 @@ switch(opt)
     case 7
         road_set = 3;
         p_stationary = 0.00;
-        p_walking = 0.60;
-        p_driving = 0.40;
+        p_walking = 0.95;
+        p_driving = 0.05;
         p_flying = 0;
     case 8
         road_set = 4;
